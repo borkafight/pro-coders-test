@@ -5,7 +5,7 @@
       <span class="project-subtitle">
         <el-input
           v-if="editing"
-          v-model="project.name"
+          v-model.lazy="project.name"
           placeholder="Please input"
         />
         <template v-else>
@@ -18,7 +18,7 @@
     <div class="project-column">
       <span class="project-title">Daily hours:</span>
       <span class="project-subtitle">
-        <el-input v-if="editing" placeholder="0" :value="project.hours" />
+        <el-input v-if="editing" v-model.lazy="project.hours" placeholder="0" />
         <template v-else>{{ project.hours }}</template>
       </span>
     </div>
