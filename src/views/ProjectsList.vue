@@ -6,6 +6,7 @@
           v-for="project in projects"
           :key="project.name"
           :project="project"
+          @remove="removeProject"
         />
       </template>
       <el-card v-else shadow="never" class="project-item">
@@ -30,15 +31,23 @@ export default {
   computed: {
     projectsLength() {
       return this.projects.length
+    },
+    nextNumber() {
+      return (
+        this.projectsLength && this.projects[this.projects.length - 1].id + 1
+      )
     }
   },
   methods: {
     addProject() {
       this.projects.push({
-        id: this.projectsLength + 1,
-        name: `Project ${this.projectsLength + 1}`,
-        hours: 8
+        id: this.nextNumber,
+        name: `Project ${this.nextNumber}`,
+        hours: '8'
       })
+    },
+    removeProject(value) {
+      this.projects = this.projects.filter(item => item.id !== value)
     }
   },
   beforeDestroy() {}
