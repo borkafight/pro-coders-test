@@ -9,7 +9,7 @@ export const getItem = key => {
 
 export const setItem = (key, data) => {
   try {
-    return JSON.stringify(localStorage.setItem(key, data))
+    localStorage.setItem(key, JSON.stringify(data))
   } catch (error) {
     console.log('Error setting data to local storage', error)
   }
@@ -17,7 +17,7 @@ export const setItem = (key, data) => {
 
 export const removeItem = key => {
   try {
-    return localStorage.removeItem(key)
+    localStorage.removeItem(key)
   } catch (error) {
     console.log('Error removing data from local storage')
   }
