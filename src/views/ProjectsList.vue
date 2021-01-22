@@ -3,52 +3,60 @@
     <div class="projects-list">
       <template v-if="projectsLength">
         <app-projects-element
-          v-for="project in projects"
+          v-for="project in getProjectsList"
           :key="project.name"
           :project="project"
-          @remove="removeProject"
         />
       </template>
       <el-card v-else shadow="never" class="project-item">
         There are no projects yet. Try to add one!
       </el-card>
     </div>
-    <el-button round @click="addProject">Add project</el-button>
+    <el-button round @click="addProject" :disabled="isSubmitting"
+      >Add project</el-button
+    >
   </div>
 </template>
 
 <script>
+import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+import {getItem} from '@/helpers/persistentStorage'
 import AppProjectsElement from '@/views/ProjectsElement'
+// import {getItem} from '@/helpers/persistentStorage'
 
 export default {
   name: 'AppProjectsList',
-  data: () => ({
-    projects: []
-  }),
   components: {
     AppProjectsElement
   },
+  mounted() {
+    this.initProjects(getItem('projects') || [])
+  },
   computed: {
+    ...mapState({
+      isSubmitting: state => state.projectsList.isSubmitting
+    }),
+    ...mapGetters(['getProjectsList']),
     projectsLength() {
-      return this.projects.length
+      return this.getProjectsList.length
     },
     nextNumber() {
       return (
-        this.projectsLength && this.projects[this.projects.length - 1].id + 1
+        this.projectsLength &&
+        this.getProjectsList[this.getProjectsList.length - 1].id + 1
       )
     }
   },
   methods: {
+    ...mapMutations(['initProjects']),
+    ...mapActions(['pushProject']),
     addProject() {
-      this.projects.push({
+      this.pushProject({
         id: this.nextNumber,
         name: `Project ${this.nextNumber}`,
         hours: '8'
       })
     },
-    removeProject(value) {
-      this.projects = this.projects.filter(item => item.id !== value)
-    }
   },
   beforeDestroy() {}
 }

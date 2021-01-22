@@ -7,7 +7,7 @@
           v-if="editing"
           size="mini"
           placeholder="Please input"
-          v-model="project.name"
+          :value="project.name"
         />
         <template v-else>
           <router-link :to="{name: 'project', params: {id: project.id}}">{{
@@ -23,7 +23,7 @@
           v-if="editing"
           size="mini"
           placeholder="0"
-          v-model="project.hours"
+          :value="project.hours"
         />
         <template v-else>{{ project.hours }}</template>
       </span>
@@ -51,7 +51,7 @@
           icon="el-icon-delete"
           size="mini"
           circle
-          @click="remove"
+          @click="removeProject(project.id)"
         ></el-button>
       </div>
     </div>
@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
+
 export default {
   name: 'AppProjectsElement',
   data: () => ({
@@ -71,6 +73,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['removeProject']),
     edit() {
       this.editing = true
     },
@@ -78,9 +81,6 @@ export default {
       if (this.project.name.length && this.project.hours > 0) {
         this.editing = false
       }
-    },
-    remove() {
-      this.$emit('remove', this.project.id)
     }
   }
 }
