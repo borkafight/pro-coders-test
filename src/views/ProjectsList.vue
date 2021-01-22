@@ -12,9 +12,9 @@
         There are no projects yet. Try to add one!
       </el-card>
     </div>
-    <el-button round @click="addProject" :disabled="isSubmitting"
-      >Add project</el-button
-    >
+    <el-button round @click="addProject" :disabled="isSubmitting">
+      Add project
+    </el-button>
   </div>
 </template>
 
@@ -56,7 +56,7 @@ export default {
         name: `Project ${this.nextNumber}`,
         hours: '8'
       })
-    },
+    }
   },
   beforeDestroy() {}
 }

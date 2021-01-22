@@ -2,8 +2,7 @@ import {setItem} from '@/helpers/persistentStorage'
 
 const state = {
   projectsList: [],
-  isSubmitting: false,
-  validationErrors: null
+  isSubmitting: false
 }
 
 const getters = {
@@ -18,27 +17,23 @@ const mutations = {
   },
   addProjectStart(state) {
     state.isSubmitting = true
-    state.validationErrors = null
   },
   addProjectSuccess(state, payload) {
     state.isSubmitting = false
     state.projectsList = payload
   },
-  addProjectFailure(state, payload) {
+  addProjectFailure(state) {
     state.isSubmitting = false
-    state.validationErrors = payload
   },
   removeProjectStart(state) {
     state.isSubmitting = true
-    state.validationErrors = null
   },
   removeProjectSuccess(state, payload) {
     state.isSubmitting = false
     state.projectsList = payload
   },
-  removeProjectFailure(state, payload) {
+  removeProjectFailure(state) {
     state.isSubmitting = false
-    state.validationErrors = payload
   }
 }
 
@@ -62,6 +57,7 @@ const actions = {
       commit('removeProjectStart')
       setTimeout(() => {
         const result = state.projectsList.filter(item => item.id !== id)
+
         commit('removeProjectSuccess', result)
         setItem('projects', [...state.projectsList])
       }, 100)

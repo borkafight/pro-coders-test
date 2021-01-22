@@ -5,9 +5,8 @@
       <span class="project-subtitle">
         <el-input
           v-if="editing"
-          size="mini"
+          v-model="project.name"
           placeholder="Please input"
-          :value="project.name"
         />
         <template v-else>
           <router-link :to="{name: 'project', params: {id: project.id}}">{{
@@ -19,12 +18,7 @@
     <div class="project-column">
       <span class="project-title">Daily hours:</span>
       <span class="project-subtitle">
-        <el-input
-          v-if="editing"
-          size="mini"
-          placeholder="0"
-          :value="project.hours"
-        />
+        <el-input v-if="editing" placeholder="0" :value="project.hours" />
         <template v-else>{{ project.hours }}</template>
       </span>
     </div>
@@ -34,7 +28,6 @@
           v-if="editing"
           type="success"
           icon="el-icon-check"
-          size="mini"
           circle
           @click="save"
         ></el-button>
@@ -42,14 +35,12 @@
           v-else
           type="primary"
           icon="el-icon-edit"
-          size="mini"
           circle
           @click="edit"
         ></el-button>
         <el-button
           type="danger"
           icon="el-icon-delete"
-          size="mini"
           circle
           @click="removeProject(project.id)"
         ></el-button>
@@ -88,8 +79,10 @@ export default {
 
 <style lang="scss" scoped>
 .project-item {
+  font-family: $base-font-family;
+
   + .project-item {
-    margin: 25px 0 0;
+    margin: 15px 0 0;
   }
 }
 
@@ -97,6 +90,7 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  background: #fcfcfc;
 }
 
 .project-column {
@@ -115,7 +109,7 @@ export default {
   &:nth-child(even) {
     align-items: center;
     position: relative;
-    max-width: 63px;
+    max-width: 56px;
     padding: 0 20px;
 
     &:before {
@@ -142,6 +136,9 @@ export default {
 }
 
 .project-subtitle {
+  @include ellipsis;
+
+  max-width: 220px;
   font-size: 26px;
   font-weight: bold;
 }
