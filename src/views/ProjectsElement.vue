@@ -5,7 +5,7 @@
       <span class="project-subtitle">
         <el-input
           v-if="editing"
-          v-model.lazy="project.name"
+          v-model.lazy="some.name"
           placeholder="Please input"
         />
         <template v-else>
@@ -18,7 +18,7 @@
     <div class="project-column">
       <span class="project-title">Daily hours:</span>
       <span class="project-subtitle">
-        <el-input v-if="editing" v-model.lazy="project.hours" placeholder="0" />
+        <el-input v-if="editing" v-model.lazy="some.hours" placeholder="0" />
         <template v-else>{{ project.hours }}</template>
       </span>
     </div>
@@ -29,7 +29,7 @@
           type="success"
           icon="el-icon-check"
           circle
-          @click="save"
+          @click="editing = false"
         ></el-button>
         <el-button
           v-else
@@ -42,7 +42,7 @@
           type="danger"
           icon="el-icon-delete"
           circle
-          @click="removeProject(project.id)"
+          @click="$emit('remove', project.id)"
         ></el-button>
       </div>
     </div>
@@ -50,12 +50,14 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
-
 export default {
   name: 'AppProjectsElement',
   data: () => ({
-    editing: false
+    editing: false,
+    some: {
+      name: '',
+      hours: 0
+    }
   }),
   props: {
     project: {
@@ -64,14 +66,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['removeProject']),
     edit() {
       this.editing = true
-    },
-    save() {
-      if (this.project.name.length && this.project.hours > 0) {
-        this.editing = false
-      }
     }
   }
 }
@@ -79,18 +75,20 @@ export default {
 
 <style lang="scss" scoped>
 .project-item {
-  font-family: $base-font-family;
+  background: rgba($white, 0.8);
+  border-color: rgba($white, 0.3);
 
   + .project-item {
     margin: 15px 0 0;
   }
 }
 
-::v-deep .el-card__body {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  background: #fcfcfc;
+::v-deep .el-card {
+  &__body {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
 }
 
 .project-column {
@@ -119,7 +117,7 @@ export default {
       right: 0;
       bottom: -20px;
       left: 0;
-      background: #f5f5f5;
+      background: rgba($white, 0.3);
     }
 
     > * {
@@ -141,5 +139,15 @@ export default {
   max-width: 220px;
   font-size: 26px;
   font-weight: bold;
+
+  a {
+    color: $steelblue;
+    transition: color $base-transition-speed $base-transition-type;
+
+    &:hover {
+      color: $royalblue;
+      text-decoration: none;
+    }
+  }
 }
 </style>

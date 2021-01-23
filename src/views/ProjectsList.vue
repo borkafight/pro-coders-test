@@ -1,61 +1,68 @@
 <template>
   <div class="projects">
     <div class="projects-list">
-      <template v-if="projectsLength">
+      <template v-if="projectsListLength">
         <app-projects-element
-          v-for="project in getProjectsList"
+          v-for="project in projectsList"
           :key="project.name"
           :project="project"
+          @remove="removeProject"
+          @edit="editProject"
         />
       </template>
       <el-card v-else shadow="never" class="project-item">
         There are no projects yet. Try to add one!
       </el-card>
     </div>
-    <el-button round @click="addProject" :disabled="isSubmitting">
+    <el-button round @click="addProject">
       Add project
     </el-button>
   </div>
 </template>
 
 <script>
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import {getItem} from '@/helpers/persistentStorage'
+import {getItem, setItem} from '@/helpers/persistentStorage'
 import AppProjectsElement from '@/views/ProjectsElement'
-// import {getItem} from '@/helpers/persistentStorage'
 
 export default {
   name: 'AppProjectsList',
+  data: () => ({
+    projectsList: null
+  }),
   components: {
     AppProjectsElement
   },
-  mounted() {
-    this.initProjects(getItem('projects') || [])
+  created() {
+    this.projectsList = getItem('projects') || []
   },
   computed: {
-    ...mapState({
-      isSubmitting: state => state.projectsList.isSubmitting
-    }),
-    ...mapGetters(['getProjectsList']),
-    projectsLength() {
-      return this.getProjectsList.length
+    projectsListLength() {
+      return this.projectsList.length || 0
     },
-    nextNumber() {
-      return (
-        this.projectsLength &&
-        this.getProjectsList[this.getProjectsList.length - 1].id + 1
-      )
+    nextId() {
+      return this.projectsList[this.projectsListLength - 1].id + 1
+    },
+    computedId() {
+      return this.projectsListLength && this.nextId
     }
   },
   methods: {
-    ...mapMutations(['initProjects']),
-    ...mapActions(['pushProject']),
     addProject() {
-      this.pushProject({
-        id: this.nextNumber,
-        name: `Project ${this.nextNumber}`,
+      const newProps = {
+        id: this.computedId,
+        name: `Project ${this.computedId}`,
         hours: '8'
-      })
+      }
+
+      this.projectsList = [...this.projectsList, newProps]
+      setItem('projects', this.projectsList)
+    },
+    editProject() {
+      return true
+    },
+    removeProject(id) {
+      this.projectsList = this.projectsList.filter(item => item.id !== id)
+      setItem('projects', this.projectsList)
     }
   },
   beforeDestroy() {}
@@ -65,10 +72,10 @@ export default {
 <style lang="scss" scoped>
 .projects {
   max-width: 500px;
-  margin: 0 auto;
+  margin: 0 auto 30px;
 
   .projects-list {
-    margin: 0 0 25px;
+    margin: 0 0 30px;
   }
 }
 </style>
