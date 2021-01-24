@@ -1,4 +1,4 @@
-import {setItem} from '@/helpers/persistentStorage'
+import {setItem} from '@/helpers/index'
 
 const state = {
   projectsList: [],
