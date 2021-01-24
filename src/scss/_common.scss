@@ -1,3 +1,7 @@
 .hidden {
   display: none;
 }
+
+.list-reset {
+  @include list_reset;
+}

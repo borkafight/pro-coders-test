@@ -1,10 +1,28 @@
 // Colors
 $white: white;
 $black: black;
+$pickled-bluewood: #2c3e50;
 $steelblue: steelblue;
 $royalblue: royalblue;
+$dodgerblue: #409eff;
+$christi: #3aba13;
+$violet-eggplant: #ad1aa8;
+$maroon-flush: #d41c50;
+$barberry: #e3e314;
 
 // Base
 $base-font-family: 'Roboto Condensed', sans-serif;
-$base-transition-type: ease-in;
-$base-transition-speed: 0.2s;
+$base-text-color: $pickled-bluewood;
+$base-border-radius: 4px;
+$base-transition-duration: 0.2s;
+$base-transition-ease: ease-in;
+$base-transition: $base-transition-duration $base-transition-ease;
+
+// Element colors
+$task-text-color: $white;
+$task-text-shadow: 1px 1px 0px rgba($black, 0.3);
+$task-type-non-urgent-color: $christi;
+$task-type-common-color: $dodgerblue;
+$task-type-tolerable-color: $barberry;
+$task-type-urgent-color: $maroon-flush;
+$task-type-bugfix-color: $violet-eggplant;

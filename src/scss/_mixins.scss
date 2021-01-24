@@ -3,3 +3,19 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+@mixin list_reset {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+@mixin task_color($color, $isHover) {
+  background: $color;
+
+  @if ($isHover == hover) {
+    &:hover {
+      background: lighten($color, 10%);
+    }
+  }
+}
