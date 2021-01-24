@@ -1,10 +1,11 @@
 <template>
   <div class="projects">
+    <h1 class="title">Space Projects Manager</h1>
     <div class="projects-list">
       <template v-if="projectsListLength">
         <app-projects-element
           v-for="project in projectsList"
-          :key="project.name"
+          :key="`project-${project.id}`"
           :project="project"
           @remove="removeProject"
           @edit="editProject"
@@ -21,7 +22,7 @@
 </template>
 
 <script>
-import {getItem, setItem} from '@/helpers/persistentStorage'
+import {getItem, setItem, generateId} from '@/helpers/index'
 import AppProjectsElement from '@/views/ProjectsElement'
 
 export default {
@@ -39,26 +40,25 @@ export default {
     projectsListLength() {
       return this.projectsList.length || 0
     },
-    nextId() {
-      return this.projectsList[this.projectsListLength - 1].id + 1
-    },
-    computedId() {
-      return this.projectsListLength && this.nextId
+    projectId() {
+      return generateId(this.projectsList)
     }
   },
   methods: {
     addProject() {
       const newProps = {
-        id: this.computedId,
-        name: `Project ${this.computedId}`,
+        id: this.projectId,
+        name: `Project ${this.projectId}`,
         hours: '8'
       }
 
       this.projectsList = [...this.projectsList, newProps]
       setItem('projects', this.projectsList)
     },
-    editProject() {
-      return true
+    editProject(props) {
+      const index = this.projectsList.findIndex(item => item.id === props.id)
+      this.$set(this.projectsList, index, props)
+      setItem('projects', this.projectsList)
     },
     removeProject(id) {
       this.projectsList = this.projectsList.filter(item => item.id !== id)
