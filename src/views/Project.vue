@@ -38,7 +38,10 @@
             placeholder="Pick a day"
           />
           <div class="color-picker-wrapper">
-            Pick a task type:
+            <span class="color-picker-title">
+              Type:
+              <span>{{ currentColor }}</span>
+            </span>
             <app-color-picker
               :key="isRerender"
               :radio-elements="radioElements"
@@ -93,6 +96,9 @@ export default {
     projectIndex() {
       return this.projectsList.findIndex(item => item.id === this.projectId)
     },
+    currentColor() {
+      return this.task.color ? this.task.color : 'no type'
+    },
     isValid() {
       return (
         this.task.name &&
@@ -106,7 +112,7 @@ export default {
   },
   methods: {
     onColorPickerChange(value) {
-      this.task.color = value
+      this.$set(this.task, 'color', value)
     },
     addTask(event) {
       if (!this.isValid) {
@@ -177,9 +183,9 @@ export default {
 
   .tasks {
     .task-item {
+      @include task_color(rgba($white, 0.5), hover);
       display: flex;
       justify-content: space-between;
-      background: rgba($white, 0.5);
       color: $task-text-color;
       font-weight: bold;
       text-shadow: $task-text-shadow;
@@ -232,10 +238,25 @@ export default {
   .color-picker-wrapper {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin: 0 0 15px;
 
     .color-picker {
       margin-left: 15px;
+      white-space: nowrap;
+    }
+
+    .color-picker-title {
+      text-align: left;
+      white-space: nowrap;
+
+      > span {
+        background: $white;
+        padding: 1px 5px;
+        font-size: 13px;
+        color: $black;
+        border-radius: $base-border-radius;
+      }
     }
   }
 
