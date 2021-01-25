@@ -3,9 +3,9 @@
     <div class="container">
       <h1 class="title">Space Projects Manager</h1>
       <div class="projects-list">
-        <template v-if="projectsListLength">
+        <template v-if="projectsLength">
           <app-projects-element
-            v-for="project in projectsList"
+            v-for="project in projects"
             :key="`project-${project.id}`"
             :project="project"
             @remove="removeProject"
@@ -24,47 +24,49 @@
 </template>
 
 <script>
-import {getItem, setItem, generateId} from '@/helpers/index'
+import {mapGetters, mapActions} from 'vuex'
+import {generateId} from '@/helpers/index'
 import AppProjectsElement from '@/views/ProjectsElement'
 
 export default {
   name: 'AppProjectsList',
-  data: () => ({
-    projectsList: null
-  }),
+  created() {
+    this.initProjects()
+  },
   components: {
     AppProjectsElement
   },
-  created() {
-    this.projectsList = getItem('projects') || []
-  },
   computed: {
-    projectsListLength() {
-      return this.projectsList.length || 0
+    ...mapGetters(['getProjects']),
+    projects() {
+      return this.getProjects
+    },
+    projectsLength() {
+      return this.getProjects.length
     },
     projectId() {
-      return generateId(this.projectsList)
+      return generateId(this.getProjects)
     }
   },
   methods: {
+    ...mapActions(['initProjects', 'pushProject']),
     addProject() {
-      const newProps = {
+      this.pushProject({
         id: this.projectId,
         name: `Project ${this.projectId}`,
         hours: '8'
-      }
-
-      this.projectsList = [...this.projectsList, newProps]
-      setItem('projects', this.projectsList)
+      })
     },
-    editProject(props) {
-      const index = this.projectsList.findIndex(item => item.id === props.id)
-      this.$set(this.projectsList, index, props)
-      setItem('projects', this.projectsList)
+    editProject() {
+      // const index = this.projectsList.findIndex(item => item.id === props.id)
+      // this.$set(this.projectsList, index, props)
+      // setItem('projects', this.projectsList)
+      return true
     },
-    removeProject(id) {
-      this.projectsList = this.projectsList.filter(item => item.id !== id)
-      setItem('projects', this.projectsList)
+    removeProject() {
+      // this.projectsList = this.projectsList.filter(item => item.id !== id)
+      // setItem('projects', this.projectsList)
+      return true
     }
   },
   beforeDestroy() {}

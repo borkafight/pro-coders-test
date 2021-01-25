@@ -1,4 +1,4 @@
-import {setItem} from '@/helpers/index'
+import {getItem, setItem} from '@/helpers/index'
 
 const state = {
   projectsList: [],
@@ -12,59 +12,27 @@ const getters = {
 }
 
 const mutations = {
-  initProjects(state, payload) {
+  updateProjects(state, payload) {
     state.projectsList = payload
-  },
-  addProjectStart(state) {
-    state.isSubmitting = true
-  },
-  addProjectSuccess(state, payload) {
-    state.isSubmitting = false
-    state.projectsList = payload
-  },
-  addProjectFailure(state) {
-    state.isSubmitting = false
-  },
-  removeProjectStart(state) {
-    state.isSubmitting = true
-  },
-  removeProjectSuccess(state, payload) {
-    state.isSubmitting = false
-    state.projectsList = payload
-  },
-  removeProjectFailure(state) {
-    state.isSubmitting = false
+    setItem('projects', payload)
   }
 }
 
 const actions = {
+  initProjects({commit}) {
+    if (getItem('projects')) {
+      commit('updateProjects', getItem('projects'))
+    }
+  },
   pushProject({commit, state}, properties) {
-    return new Promise(() => {
-      commit('addProjectStart')
-      setTimeout(() => {
-        const mergedProjects = [...state.projectsList, properties]
+    const mergedProjects = [...state.projectsList, properties]
 
-        commit('addProjectSuccess', mergedProjects)
-        setItem('projects', mergedProjects)
-      }, 100)
-    }).catch(result => {
-      console.log('Error', result)
-      commit('addProjectFailure')
-    })
+    commit('updateProjects', mergedProjects)
   },
   removeProject({commit, state}, id) {
-    return new Promise(() => {
-      commit('removeProjectStart')
-      setTimeout(() => {
-        const result = state.projectsList.filter(item => item.id !== id)
+    const result = state.projectsList.filter(item => item.id !== id)
 
-        commit('removeProjectSuccess', result)
-        setItem('projects', [...state.projectsList])
-      }, 100)
-    }).catch(result => {
-      console.log('Error', result)
-      commit('removeProjectFailure')
-    })
+    commit('updateProjects', result)
   }
 }
 

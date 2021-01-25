@@ -3,9 +3,9 @@
     <div class="project-column name">
       <span class="project-title"
         >Project name:
-        <span class="tasks-number">
+        <span v-if="tasksQty" class="tasks-number">
           <router-link :to="{name: 'project', params: {id: project.id}}">
-            {{ projectTasksQuantity }} tasks
+            {{ tasksQty }} {{ tasksQty > 1 ? 'tasks' : 'task' }}
           </router-link>
         </span>
       </span>
@@ -54,23 +54,21 @@
         type="danger"
         icon="el-icon-delete"
         circle
-        @click="$emit('remove', project.id)"
+        @click="remove"
       ></el-button>
     </div>
   </el-card>
 </template>
 
 <script>
+import {mapActions, mapGetters, mapMutations} from 'vuex'
 import {Notification} from 'element-ui'
 
 export default {
   name: 'AppProjectsElement',
   data: () => ({
     editing: false,
-    localProject: {
-      name: '',
-      hours: ''
-    }
+    localProject: {}
   }),
   props: {
     project: {
@@ -79,17 +77,19 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getProjects']),
     isValid() {
       return this.localProject.name.length && this.localProject.hours.length
     },
-    projectTasksQuantity() {
+    tasksQty() {
       return this.project.tasks && this.project.tasks.length
     }
   },
   methods: {
+    ...mapActions(['removeProject']),
+    ...mapMutations(['updateProjects']),
     edit() {
-      this.localProject.name = this.project.name
-      this.localProject.hours = this.project.hours
+      this.localProject = this.project
       this.editing = true
     },
     save() {
@@ -101,11 +101,11 @@ export default {
         return
       }
 
-      this.$emit('edit', {
-        id: this.project.id,
-        ...this.localProject
-      })
+      this.updateProjects(this.getProjects)
       this.editing = false
+    },
+    remove() {
+      this.removeProject(this.project.id)
     }
   }
 }
