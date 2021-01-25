@@ -1,23 +1,25 @@
 <template>
   <div class="projects">
-    <h1 class="title">Space Projects Manager</h1>
-    <div class="projects-list">
-      <template v-if="projectsListLength">
-        <app-projects-element
-          v-for="project in projectsList"
-          :key="`project-${project.id}`"
-          :project="project"
-          @remove="removeProject"
-          @edit="editProject"
-        />
-      </template>
-      <el-card v-else shadow="never" class="project-item">
-        There are no projects yet. Try to add one!
-      </el-card>
+    <div class="container">
+      <h1 class="title">Space Projects Manager</h1>
+      <div class="projects-list">
+        <template v-if="projectsListLength">
+          <app-projects-element
+            v-for="project in projectsList"
+            :key="`project-${project.id}`"
+            :project="project"
+            @remove="removeProject"
+            @edit="editProject"
+          />
+        </template>
+        <el-card v-else shadow="never" class="project-item">
+          There are no projects yet. Try to add one!
+        </el-card>
+      </div>
+      <el-button round type="primary" @click="addProject">
+        Add project
+      </el-button>
     </div>
-    <el-button round @click="addProject">
-      Add project
-    </el-button>
   </div>
 </template>
 
@@ -71,8 +73,7 @@ export default {
 
 <style lang="scss" scoped>
 .projects {
-  max-width: 500px;
-  margin: 0 auto 30px;
+  padding: 0 0 30px;
 
   .projects-list {
     margin: 0 0 30px;

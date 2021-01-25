@@ -14,9 +14,4 @@
   color: $base-text-color;
   overflow: auto;
 }
-
-.title {
-  color: $white;
-  text-transform: uppercase;
-}
 </style>
