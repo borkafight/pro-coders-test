@@ -6,7 +6,7 @@ const state = {
 }
 
 const getters = {
-  getProjectsList: state => {
+  getProjects: state => {
     return state.projectsList
   }
 }
