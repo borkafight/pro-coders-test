@@ -2,7 +2,6 @@
   <el-radio-group
     v-model="pickerValue"
     class="color-picker"
-    :value="pickerValue"
     @change="$emit('color-changed', $event)"
   >
     <el-radio
@@ -24,7 +23,7 @@ export default {
     }
   },
   data: () => ({
-    pickerValue: 'non-urgent'
+    pickerValue: ''
   })
 }
 </script>

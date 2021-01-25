@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="project">
     <h1 class="title">
       {{ project.name }} <span>{{ project.hours }} hrs/day</span>
     </h1>
-    <div class="project">
+    <div class="project-holder">
       <div class="project-col">
         <ul class="tasks list-reset">
           <template v-if="tasks && tasks.length">
@@ -14,7 +14,7 @@
               :class="task.color"
             >
               <span>{{ task.name }}</span>
-              <span>{{ task.hours }}</span>
+              <span>{{ task.hours }} h.</span>
             </li>
           </template>
           <li v-else>There're no tasks yet.</li>
@@ -35,6 +35,7 @@
         <div class="color-picker-wrapper">
           Pick a task type:
           <app-color-picker
+            :key="isRerender"
             :radio-elements="radioElements"
             :value="task.color"
             @color-changed="onColorPickerChange($event)"
@@ -43,7 +44,7 @@
         <el-button native-type="submit" type="primary">Add task</el-button>
       </form>
     </div>
-    <div class="grantt-chart">
+    <div class="project-col grantt-chart">
       There's no chart yet
     </div>
   </div>
@@ -57,6 +58,7 @@ import AppColorPicker from '@/components/ColorPicker'
 export default {
   name: 'AppProject',
   data: () => ({
+    isRerender: false,
     projectsList: null,
     project: null,
     task: {},
@@ -116,6 +118,7 @@ export default {
       setItem('projects', this.projectsList)
       event.target.reset()
       this.task = {}
+      this.isRerender = !this.isRerender
     }
   }
 }
@@ -133,16 +136,20 @@ export default {
 }
 
 .project {
-  align-items: start;
-  display: grid;
   max-width: 700px;
+  margin: 0 auto 40px;
+}
+
+.project-holder {
+  display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 20px;
-  margin: 0 auto 40px;
+  align-items: start;
 }
 
 .project-col {
   background: rgba($white, 0.2);
+  margin: 0 0 20px;
   padding: 15px;
   border-radius: 7px;
   color: $white;
@@ -190,7 +197,7 @@ export default {
       }
 
       &:last-child {
-        min-width: 25px;
+        min-width: 40px;
         background: rgba($white, 0.2);
         text-align: center;
       }
@@ -229,8 +236,5 @@ export default {
 }
 
 .grantt-chart {
-  height: 400px;
-  background: $white;
-  margin: 0 -15px;
 }
 </style>
