@@ -50,7 +50,8 @@ export default {
       this.pushProject({
         id: this.projectId,
         name: `Project ${this.projectId}`,
-        hours: '8'
+        hours: '8',
+        tasks: []
       })
 
       Notification.success({
