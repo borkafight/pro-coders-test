@@ -41,3 +41,30 @@
     transform: rotate(45deg);
   }
 }
+
+.close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 21px;
+  height: 21px;
+  cursor: pointer;
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    background: $close-btn-color;
+    width: 2px;
+    height: 23px;
+  }
+
+  &:before {
+    transform: rotate(-45deg);
+  }
+
+  &:after {
+    transform: rotate(45deg);
+  }
+}
