@@ -103,6 +103,11 @@ export default {
 
       this.updateProjects(this.getProjects)
       this.editing = false
+
+      Notification.success({
+        title: 'Success',
+        message: 'Project has been updated.'
+      })
     },
     remove() {
       this.removeProject(this.project.id)
