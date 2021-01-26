@@ -4,12 +4,10 @@
       <h1 class="title">Space Projects Manager</h1>
       <div class="projects-list">
         <template v-if="projectsLength">
-          <app-projects-element
+          <app-projects-item
             v-for="project in projects"
             :key="`project-${project.id}`"
             :project="project"
-            @remove="removeProject"
-            @edit="editProject"
           />
         </template>
         <el-card v-else shadow="never" class="project-item">
@@ -26,15 +24,13 @@
 <script>
 import {mapGetters, mapActions} from 'vuex'
 import {generateId} from '@/helpers/index'
-import AppProjectsElement from '@/views/ProjectsElement'
+import {Notification} from 'element-ui'
+import AppProjectsItem from '@/views/ProjectsItem'
 
 export default {
   name: 'AppProjectsList',
-  created() {
-    this.initProjects()
-  },
   components: {
-    AppProjectsElement
+    AppProjectsItem
   },
   computed: {
     ...mapGetters(['getProjects']),
@@ -49,27 +45,20 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['initProjects', 'pushProject']),
+    ...mapActions(['pushProject']),
     addProject() {
       this.pushProject({
         id: this.projectId,
         name: `Project ${this.projectId}`,
         hours: '8'
       })
-    },
-    editProject() {
-      // const index = this.projectsList.findIndex(item => item.id === props.id)
-      // this.$set(this.projectsList, index, props)
-      // setItem('projects', this.projectsList)
-      return true
-    },
-    removeProject() {
-      // this.projectsList = this.projectsList.filter(item => item.id !== id)
-      // setItem('projects', this.projectsList)
-      return true
+
+      Notification.success({
+        title: 'Success',
+        message: 'New project has been added.'
+      })
     }
-  },
-  beforeDestroy() {}
+  }
 }
 </script>
 
