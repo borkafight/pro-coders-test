@@ -14,7 +14,6 @@
           v-if="editing"
           v-model.lazy="localProject.name"
           placeholder="Please input"
-          @keyup.enter="save"
         />
         <template v-else>
           <router-link :to="{name: 'project', params: {id: project.id}}">
@@ -30,7 +29,6 @@
           v-if="editing"
           v-model.lazy="localProject.hours"
           placeholder="0"
-          @keyup.enter="save"
         />
         <template v-else>{{ project.hours }}</template>
       </span>

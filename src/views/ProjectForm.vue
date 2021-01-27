@@ -5,7 +5,6 @@
     <el-date-picker
       v-model="task.date"
       format="dd-MM-yyyy"
-      value-format="dd-MM-yyyy"
       type="date"
       placeholder="Pick a day"
     />
@@ -56,7 +55,7 @@ export default {
     }
   },
   methods: {
-    addTask() {
+    addTask(event) {
       if (!this.isValid) {
         Notification.error({
           title: 'Error',
@@ -66,8 +65,7 @@ export default {
       }
 
       this.$emit('addTask', this.task)
-
-      this.task = {}
+      event.target.reset()
       this.isRerender = !this.isRerender
 
       Notification.success({
